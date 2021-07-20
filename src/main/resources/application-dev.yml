@@ -1,0 +1,32 @@
+server:
+  port: 10003
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: system_route
+          uri: lb://STUDY-SYSTEM
+          predicates:
+            - Path=/sysApi/**
+          filters:
+            - RewritePath=/sysApi/(?<segment>.*),/$\{segment}
+        - id: oneMap_route
+          uri: http://localhost:3000
+          predicates:
+            - Path=/oneMapApi/**
+          filters:
+            - RewritePath=/oneMapApi/(?<segment>.*),/$\{segment}
+        - id: webBack_route
+          uri: http://localhost:10007
+          predicates:
+            - Path=/**
+          filters:
+            - RewritePath=/(?<segment>.*),/$\{segment}
+  application:
+    name: study-gateway
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:10001/eureka/  # 服务中心地址
