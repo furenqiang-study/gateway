@@ -1,5 +1,5 @@
 server:
-  port: 10003
+  port: 80
 
 spring:
   cloud:
@@ -17,6 +17,12 @@ spring:
             - Path=/oneMapApi/**
           filters:
             - RewritePath=/oneMapApi/(?<segment>.*),/$\{segment}
+        - id: business_route
+          uri: lb://STUDY-BUSINESS
+          predicates:
+            - Path=/busApi/**
+          filters:
+            - RewritePath=/busApi/(?<segment>.*),/$\{segment}
         - id: webBack_route
           uri: http://localhost:10007
           predicates:
@@ -29,4 +35,4 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:10001/eureka/  # 服务中心地址
+      defaultZone: http://localhost:10011/eureka/  # 服务中心地址
